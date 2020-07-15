@@ -19,9 +19,10 @@ On question:
 ### Telegram integration
 * [ ] Find articles/tutorials/etc about telegram bot creation
 * [ ] Create simple bot, which can get command for user and
-### Instapaper or pocket integration
-* [ ] Take a look at Instapaper API
-* [ ] Take a look at Pocket API    
+### Reader integration
+* Instapapper will not provide application token for any user.
+* Pocket provide ability to get token without additional checks
+* [ ] Auth using application to Pocket
 ### Speech recognition
 ### Speech generator
 ### GUI/Web interface
