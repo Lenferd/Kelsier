@@ -16,9 +16,14 @@ Represent connection between third-party application and core, or with some comp
 
 On question:
 * [ ] Mark task implemented. (Command like: Mark A task implemented)
+
 ### Telegram integration
-* [ ] Find articles/tutorials/etc about telegram bot creation
-* [ ] Create simple bot, which can get command for user and
+* https://github.com/eternnoir/pyTelegramBotAPI
+* Command are redirected to command extractor
+
+Minor:
+* [ ] Improve fault tolerance 
+
 ### Reader integration
 * Instapapper will not provide application token for any user.
 * Pocket provide ability to get token without additional checks
@@ -35,6 +40,8 @@ Model-view representation? For different kind of request data will be different 
 
 ## Core
 Potential container of trash code.
+
+* [ ] Add logger class 
 ### CommandExtractor
 * [ ] Extract from simple command what to do just using regex or smth like this
 * [ ] Based on
