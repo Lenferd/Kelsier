@@ -2,13 +2,14 @@
 *“There’s always another secret.”*
 * [ ] Architecture overview required
 
+------------------
 ## Modules
 Represent connection between third-party application and core, or with some component, which can be used without this program.
 
 ### Microsoft TO-DO integration
-* [x] Check ability to use API
-* [x] Try to query task list with graph explorer https://developer.microsoft.com/en-us/graph/graph-explorer
-* [x] Find example app to start
+* https://docs.microsoft.com/en-us/azure/active-directory/develop/microsoft-graph-intro
+* https://developer.microsoft.com/en-us/graph/graph-explorer
+* Found sample application, which use Django as backend
 * [ ] Modify app to allow auth without web interface  
 * [ ] Get rid of web deps (django and etc).  
      *Should I? It will be still kind of service, and access to web application can be useful for testing / maintenance.*
@@ -17,12 +18,16 @@ Represent connection between third-party application and core, or with some comp
 On question:
 * [ ] Mark task implemented. (Command like: Mark A task implemented)
 
+### OneNote integration
+* [ ] Check, how this integration can be done
+* [ ] Investigate, how "Fill form" functionality can be implemented. Like, I have template for every, and using telegram bot can ask myself questions from this template, and insert answers in specific fields.
+
 ### Telegram integration
 * https://github.com/eternnoir/pyTelegramBotAPI
 * Command are redirected to command extractor
 
 Minor:
-* [ ] Improve fault tolerance 
+* [ ] Improve fault tolerance
 
 ### Reader integration
 * Instapapper will not provide application token for any user.
@@ -33,25 +38,29 @@ Minor:
 ### GUI/Web interface
 * [ ] Think about using Web interface instead of telegram for first time
 
+------------------
 ## Glue interfaces
 Model-view representation? For different kind of request data will be different and view for modules too.
 
 * [ ] Think how to represent requests data.
 
+------------------
 ## Core
 Potential container of trash code.
 
-* [ ] Add logger class 
-### CommandExtractor
+* [ ] Add logger class
+### Command Extractor
+Try to understand user command, extract key phrases, run specific scenario.
 * [ ] Extract from simple command what to do just using regex or smth like this
 * [ ] Based on
 
 On question:
 * [ ] Improved command extractor using NLP
-### PipelineCommander
-? Is this a possible scenario, in which more than two modules will be involved?
 
+### Scenario Commander
+To work with complex scenario
 
+------------------
 ## Use case
 ### Ask film/serial to watch from list.
 Command: Telegram: "What to watch?"  
@@ -63,3 +72,20 @@ Sequence:
 -> Glue::TODO { Get random one, or based on additional criterion }  
 Result: Film/serial <task desc>. Will see?  
 TODO: Simplify this shit.  
+
+### Fill daily task
+Command : Telegram: "Plan day"  
+Details: Plan 3 important work / non-work task, which should be completed today  
+Sequence:   
+-> Telegram { User input }  
+-> Command Extractor { Create scenario pipeline }  
+-> TODO: Add tasks
+Result: Microsoft TO-DO will contain specified tasks in "My day" category.  
+
+### Fill form (Day retrospective)
+Command : Telegram: "Day retrospective"  
+Sequence:  
+-> Telegram { Get user input }  
+-> Command Extractor { Understand, that some complex logic should be executed }  
+-> OneNote: { Try to find template, create pipeline based on template }  
+Result: Sequence of questions on Telegram side, answers are stored in OneNote
