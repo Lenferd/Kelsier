@@ -76,14 +76,31 @@ class MicrosoftToDo:
     response = requests.get(
       url,
       headers=req_headers,
-    ).json()
-    logging.debug("Response: {}".format(json.dumps(response, indent=2)))
-    return response
+    )
+    if response.ok:
+      logging.debug("Response: {}".format(json.dumps(response.json(), indent=2)))
+      return response.json()
+    else:
+      logging.error("Failed to get response {}".format(json.dumps(response.json(), indent=2)))
+      return None
 
 
 if __name__ == '__main__':
   todo = MicrosoftToDo()
-  simple_request = "https://graph.microsoft.com/beta/me"
-  response = todo.request(simple_request)
-  print("Response: {}".format(json.dumps(response, indent=2)))
+  tasks_url = "https://graph.microsoft.com/beta/me/todo/lists"
+  response = todo.request(tasks_url)
+
+  # Fixme searching for Zadachi field can be simplified
+  task_id = None
+  for task_list in response['value']:
+    if task_list["displayName"] == "Задачи":
+        task_id = task_list["id"]
+
+  task_url = "{}/{}/{}".format(tasks_url, task_id, "tasks")
+
+  response = todo.request(task_url)
+  print(response)
+  # print(obj)
+  # print("Response: {}".format(json.dumps(response, indent=2)))
+
 
