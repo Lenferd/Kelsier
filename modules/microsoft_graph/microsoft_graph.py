@@ -38,12 +38,14 @@ class MicrosoftToDo:
       config["client_id"], authority=config["authority"],
       token_cache=self._cache
     )
-
+    result = None
     accounts = ms_api.get_accounts()
-    if len(accounts) > 1:
-      logging.error("More the one account. First will be used anyway")
+    if accounts:
+      logging.debug("Account found")
+      if len(accounts) > 1:
+        logging.error("More the one account. First will be used anyway")
 
-    result = ms_api.acquire_token_silent(config["scope"], account=accounts[0])
+      result = ms_api.acquire_token_silent(config["scope"], account=accounts[0])
 
     if not result:
       logging.info("No suitable token exists in cache. Let's get a new one from AAD.")
