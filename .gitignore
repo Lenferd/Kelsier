@@ -3,6 +3,8 @@
 
 # Private
 tokens.py
+*.yml
+*.bin
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
