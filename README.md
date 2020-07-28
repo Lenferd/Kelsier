@@ -10,13 +10,16 @@ Represent connection between third-party application and core, or with some comp
 * https://docs.microsoft.com/en-us/azure/active-directory/develop/microsoft-graph-intro
 * https://developer.microsoft.com/en-us/graph/graph-explorer
 * Found sample application, which use Django as backend
-* [ ] Modify app to allow auth without web interface  
-* [ ] Get rid of web deps (django and etc).  
-     *Should I? It will be still kind of service, and access to web application can be useful for testing / maintenance.*
-* [ ] Add functionality to get task from specific directory
+* Used sample to create native application
+* Added ability to get task folder url (id)
+* Added ability to create a new task
 
-On question:
+Not important:
 * [ ] Mark task implemented. (Command like: Mark A task implemented)
+* [ ] Function for getting folder id using folder name 
+* [ ] Ability to specify directory, to which create task (id is searched inside code)
+* [ ] Ability to get and print task 
+* [ ] Ability to close specific task
 
 ### OneNote integration
 * [ ] Check, how this integration can be done
