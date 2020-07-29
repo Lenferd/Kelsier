@@ -21,7 +21,7 @@ Not important:
 * [ ] Ability to close specific task
 
 ### OneNote integration
-* [ ] Check, how this integration can be done
+* Can get page from OneNote
 * [ ] Investigate, how "Fill form" functionality can be implemented. Like, I have template for every, and using telegram bot can ask myself questions from this template, and insert answers in specific fields.
 
 ### Telegram integration
