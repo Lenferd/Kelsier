@@ -79,14 +79,20 @@ class MicrosoftGraph:
       logging.error(result.get("error_description"))
       logging.error(result.get("correlation_id"))
 
+  def _is_json(self, headers):
+    return 'application/json' in headers['Content-Type']
+
+  # TODO Overcomplicated, simplify things
   def _is_response_ok(self, response):
     if type(response) is not requests.Response:
       # TODO Move it under try-catch block
       logging.error("Incorrect request: {}".format(json.dumps(response, indent=2)))
       return False
     if response.ok:
-      logging.debug(
-        "Response: {}".format(json.dumps(response.json(), indent=2)))
+      if self._is_json(response.headers):
+        json_response = response.json()
+        logging.debug(
+          "Response: {}".format(json.dumps(json_response, indent=2)))
       return True
     else:
       logging.error("Failed to get response {}".format(
@@ -99,7 +105,10 @@ class MicrosoftGraph:
       headers=self.req_headers,
     )
     if self._is_response_ok(response):
-      return response.json()
+      if self._is_json(response.headers):
+        return response.json()
+      else:
+        return response.text
     else:
       return None
 
