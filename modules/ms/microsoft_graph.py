@@ -20,7 +20,7 @@ def format_json(json_obj):
   return json.dumps(to_dump_again, indent=2)
 
 
-class MicrosoftToDo:
+class MicrosoftGraph:
   def __init__(self):
     self._cache = None
     self._access_token = None
@@ -112,44 +112,3 @@ class MicrosoftToDo:
       return response.json()
     else:
       return None
-
-
-
-class Task:
-  def __init__(self, title: str):
-    self._title = title
-    self._importance = 'normal'
-    self._isReminderOn = 'false'  # reminders for looser
-    self._status = 'notStarted'
-
-  def get_json(self):
-    return json.dumps(self.get_dict())
-
-  def get_dict(self):
-    return {
-      'title': self._title,
-      'importance': self._importance,
-      'isReminderOn': self._isReminderOn,
-      'status': self._status
-    }
-
-
-if __name__ == '__main__':
-  todo = MicrosoftToDo()
-  tasks_url = "https://graph.microsoft.com/beta/me/todo/lists"
-  response = todo.request(tasks_url)
-
-  # Fixme searching for Zadachi field can be simplified
-  task_id = None
-  for task_list in response['value']:
-    if task_list["displayName"] == "Задачи":
-      task_id = task_list["id"]
-
-  task_list_url = "{}/{}/{}".format(tasks_url, task_id, "tasks")
-
-  response = todo.request(task_list_url)
-  task = Task("Remove me!")
-  print(format_json(task.get_json()))
-  response = todo.post(task_list_url, task.get_dict())
-  print(response)
-
