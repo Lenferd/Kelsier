@@ -99,11 +99,7 @@ class MicrosoftGraph:
         json.dumps(response.json(), indent=2)))
       return False
 
-  def request(self, url):
-    response = requests.get(
-      url,
-      headers=self.req_headers,
-    )
+  def _handle_response(self, response):
     if self._is_response_ok(response):
       if self._is_json(response.headers):
         return response.json()
@@ -112,12 +108,20 @@ class MicrosoftGraph:
     else:
       return None
 
+  def request(self, url):
+    response = requests.get(
+      url,
+      headers=self.req_headers,
+    )
+    return self._handle_response(response)
+
   def post(self, url, json_data):
-    # TODO dict, not a json as an input, what the heck
     response = requests.post(
       url, headers=self.req_headers,
       json=json_data)
-    if self._is_response_ok(response):
-      return response.json()
-    else:
-      return None
+    return self._handle_response(response)
+
+  def path(self, url, data):
+    response = requests.patch(
+      url, json=data, headers=self.req_headers)
+    return self._handle_response(response)

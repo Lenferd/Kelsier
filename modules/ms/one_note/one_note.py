@@ -1,6 +1,6 @@
 from modules.ms.microsoft_graph import MicrosoftGraph
 from modules.ms.one_note.notebook import Notebook
-
+from modules.ms.one_note.page import Page
 
 class OneNote:
   def __init__(self):
@@ -29,7 +29,7 @@ class OneNote:
     return notebooks
 
   # TODO extend for ability get notebook, section and work with them
-  def get_page(self, notebook, section, pageName):
+  def getPage(self, notebook, section, pageName) -> Page:
     notebook = self._getNotebook(notebook)
     section = notebook.getSection(section)
     page = section.getPage(pageName)
