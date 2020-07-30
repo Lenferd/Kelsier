@@ -13,17 +13,20 @@ Represent connection between third-party application and core, or with some comp
 * Used sample to create native application
 * Added ability to get task folder url (id)
 * Added ability to create a new task
+* Task can be created in specific list using provided name of list
 
 Not important:
 * [ ] Mark task implemented. (Command like: Mark A task implemented)
-* [ ] Function for getting folder id using folder name 
-* [ ] Ability to specify directory, to which create task (id is searched inside code)
-* [ ] Ability to get and print task 
+* [ ] Ability to get and print task
 * [ ] Ability to close specific task
 
 ### OneNote integration
-* [ ] Check, how this integration can be done
-* [ ] Investigate, how "Fill form" functionality can be implemented. Like, I have template for every, and using telegram bot can ask myself questions from this template, and insert answers in specific fields.
+* Can get page from OneNote
+* Implement ability to replace text in paragraphs
+
+Not important:
+* [ ] Parse all html file to some structure
+* [ ] Font format control
 
 ### Telegram integration
 * https://github.com/eternnoir/pyTelegramBotAPI

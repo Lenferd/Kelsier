@@ -20,7 +20,7 @@ def format_json(json_obj):
   return json.dumps(to_dump_again, indent=2)
 
 
-class MicrosoftToDo:
+class MicrosoftGraph:
   def __init__(self):
     self._cache = None
     self._access_token = None
@@ -79,77 +79,49 @@ class MicrosoftToDo:
       logging.error(result.get("error_description"))
       logging.error(result.get("correlation_id"))
 
+  def _is_json(self, headers):
+    return 'application/json' in headers['Content-Type']
+
+  # TODO Overcomplicated, simplify things
   def _is_response_ok(self, response):
     if type(response) is not requests.Response:
       # TODO Move it under try-catch block
       logging.error("Incorrect request: {}".format(json.dumps(response, indent=2)))
       return False
     if response.ok:
-      logging.debug(
-        "Response: {}".format(json.dumps(response.json(), indent=2)))
+      if self._is_json(response.headers):
+        json_response = response.json()
+        logging.debug(
+          "Response: {}".format(json.dumps(json_response, indent=2)))
       return True
     else:
       logging.error("Failed to get response {}".format(
         json.dumps(response.json(), indent=2)))
       return False
 
+  def _handle_response(self, response):
+    if self._is_response_ok(response):
+      if self._is_json(response.headers):
+        return response.json()
+      else:
+        return response.text
+    else:
+      return None
+
   def request(self, url):
     response = requests.get(
       url,
       headers=self.req_headers,
     )
-    if self._is_response_ok(response):
-      return response.json()
-    else:
-      return None
+    return self._handle_response(response)
 
   def post(self, url, json_data):
-    # TODO dict, not a json as an input, what the heck
     response = requests.post(
       url, headers=self.req_headers,
       json=json_data)
-    if self._is_response_ok(response):
-      return response.json()
-    else:
-      return None
+    return self._handle_response(response)
 
-
-
-class Task:
-  def __init__(self, title: str):
-    self._title = title
-    self._importance = 'normal'
-    self._isReminderOn = 'false'  # reminders for looser
-    self._status = 'notStarted'
-
-  def get_json(self):
-    return json.dumps(self.get_dict())
-
-  def get_dict(self):
-    return {
-      'title': self._title,
-      'importance': self._importance,
-      'isReminderOn': self._isReminderOn,
-      'status': self._status
-    }
-
-
-if __name__ == '__main__':
-  todo = MicrosoftToDo()
-  tasks_url = "https://graph.microsoft.com/beta/me/todo/lists"
-  response = todo.request(tasks_url)
-
-  # Fixme searching for Zadachi field can be simplified
-  task_id = None
-  for task_list in response['value']:
-    if task_list["displayName"] == "Задачи":
-      task_id = task_list["id"]
-
-  task_list_url = "{}/{}/{}".format(tasks_url, task_id, "tasks")
-
-  response = todo.request(task_list_url)
-  task = Task("Remove me!")
-  print(format_json(task.get_json()))
-  response = todo.post(task_list_url, task.get_dict())
-  print(response)
-
+  def path(self, url, data):
+    response = requests.patch(
+      url, json=data, headers=self.req_headers)
+    return self._handle_response(response)
