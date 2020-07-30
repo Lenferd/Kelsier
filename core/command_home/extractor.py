@@ -20,4 +20,5 @@ class Extractor:
 
   @staticmethod
   def _searchWhatToDo(string: str) -> str:
+    # TODO Handle this part more precisely
     return string.split(":")[1]
