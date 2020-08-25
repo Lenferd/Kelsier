@@ -16,6 +16,10 @@ class TestHeadquarters(TestCase):
     exec_unit = Headquarter.process(initiate)
     self.assertEqual(exec_unit.getStatus(), UnitStatus.READY_TO_WORK)
 
+  def test_can_get_question_for_user(self):
+    initiate = "fill form"
+    expected_question = "Question 1"
+    exec_unit = Headquarter.process(initiate)
+    question = exec_unit.getQuestion()
+    self.assertEqual(expected_question, question)
 
-  def test_can_execute_fill_form_command(self):
-    pass

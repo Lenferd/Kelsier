@@ -18,5 +18,5 @@ class Extractor:
     if len(try_split) > 1:
       command = try_split[1]
     else:
-      raise Exception("I don't know how to split command :(")
+      ""
     return command

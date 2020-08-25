@@ -16,3 +16,6 @@ class ExecutionUnit:
 
   def _set_bool_to_status(self, status: bool):
     self._status = UnitStatus.OK if True else UnitStatus.ERROR
+
+  def getQuestion(self):
+    raise Exception("Not implemented")

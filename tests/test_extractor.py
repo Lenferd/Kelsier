@@ -32,6 +32,13 @@ class TestExtractor(TestCase):
     self.assertEqual(expected_module, module)
     self.assertEqual(str_command, command)
 
+  def test_todo_can_get_module_without_two_dots(self):
+    expected_module = AvailableModules.TODO
+    str_command = "create todo"
+
+    module = self.extractor.getModule(str_command)
+    self.assertEqual(expected_module, module)
+
   #   TODO Implement
   def test_todo_can_split_without_two_dots(self):
     pass

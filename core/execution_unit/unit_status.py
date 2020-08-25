@@ -6,3 +6,4 @@ class UnitStatus(Enum):
   OK = 0
 
   READY_TO_WORK = 10
+  HAVE_QUESTION = 11
