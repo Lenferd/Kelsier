@@ -1,6 +1,6 @@
 from unittest import TestCase
 from core.command_home.extractor import Extractor
-from core.command_home.commands import Types
+from core.command_home.available_modules import AvailableModules
 
 
 class TestExtractor(TestCase):
@@ -13,7 +13,7 @@ class TestExtractor(TestCase):
     extractor = Extractor()
     command = extractor.parseCommand(str_command, None)
 
-    expected_command = Types.TODO_CREATE_TODO
+    expected_command = AvailableModules.TODO_CREATE_TODO
     self.assertEqual(command.getType(), expected_command)
     self.assertEqual(command.getData(), expected_data)
 
