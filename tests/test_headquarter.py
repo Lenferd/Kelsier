@@ -14,7 +14,7 @@ class TestHeadquarters(TestCase):
   def test_can_initiate_interactive_process(self):
     initiate = "fill form:"
     exec_unit = Headquarter.process(initiate)
-    self.assertEqual(exec_unit.getStatus(), UnitStatus.READY_TO_WORK)
+    self.assertEqual(exec_unit.getStatus(), UnitStatus.HAVE_QUESTION)
 
   def test_can_get_question_for_user(self):
     initiate = "fill form"
@@ -31,4 +31,12 @@ class TestHeadquarters(TestCase):
     exec_unit.execute("Answer")
     question2 = exec_unit.getQuestion()
     self.assertEqual(expected_question, question2)
+
+  def test_can_can_read_oneNote(self):
+    initiate = "read note"
+    exec_unit = Headquarter.process(initiate)
+    text = exec_unit.execute("get first")
+
+    expected_text = "Question 1: { Question 1 reply }"
+    self.assertEqual(expected_text, text)
 

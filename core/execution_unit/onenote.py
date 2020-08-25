@@ -22,6 +22,9 @@ class OneNoteExecutionUnit(ExecutionUnit):
     self._paragraphs = self._page.getParagraphs()
 
   def execute(self, instructions):
+    if instructions.find("get") != -1:
+      # TODO very tricky
+      return self._paragraphs[self._question_index]['text']
     if len(instructions):
       self._question_index += 1
 
