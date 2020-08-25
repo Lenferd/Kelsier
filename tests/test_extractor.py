@@ -39,6 +39,13 @@ class TestExtractor(TestCase):
     module = self.extractor.getModule(str_command)
     self.assertEqual(expected_module, module)
 
+  def test_onenote_read_page(self):
+    expected_module = AvailableModules.ONE_NOTE
+    str_command = "read note"
+
+    module = self.extractor.getModule(str_command)
+    self.assertEqual(expected_module, module)
+
   #   TODO Implement
   def test_todo_can_split_without_two_dots(self):
     pass

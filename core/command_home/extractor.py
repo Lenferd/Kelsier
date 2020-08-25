@@ -1,13 +1,21 @@
 from core.command_home.available_modules import AvailableModules
+import re
 
 
 class Extractor:
   @staticmethod
   def getModule(str_command: str) -> AvailableModules:
-    if str_command.lower().find("todo") != -1:
+    symbols_to_die = r'[.:!?;]'
+    cleaned_str = re.sub(symbols_to_die, ' ', str_command)
+    words = cleaned_str.lower().split()
+
+    todo_words = {"todo", "task"}
+    one_note_words = {"onenote", "note", "form", "page"}
+    if set(words) & set(todo_words):
       return AvailableModules.TODO
-    if str_command.lower().find("form") != -1:
+    elif set(words) & set(one_note_words):
       return AvailableModules.ONE_NOTE
+    return AvailableModules.NOT_FOUND
 
   # TODO Should it be execution module logic?
   @staticmethod
