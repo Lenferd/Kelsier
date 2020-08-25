@@ -23,3 +23,12 @@ class TestHeadquarters(TestCase):
     question = exec_unit.getQuestion()
     self.assertEqual(expected_question, question)
 
+  def test_can_get_sequence_of_questions(self):
+    initiate = "fill form"
+    expected_question = "Question 2"
+    exec_unit = Headquarter.process(initiate)
+    question1 = exec_unit.getQuestion()
+    exec_unit.execute("Answer")
+    question2 = exec_unit.getQuestion()
+    self.assertEqual(expected_question, question2)
+

@@ -21,15 +21,17 @@ class OneNoteExecutionUnit(ExecutionUnit):
     self._question_index = 0
     self._paragraphs = self._page.getParagraphs()
 
+  def execute(self, instructions):
+    if len(instructions):
+      self._question_index += 1
+
+  # TODO Return class, which can be user to provide answer
   def getQuestion(self):
     if self._status != UnitStatus.HAVE_QUESTION:
       return None
     else:
       text = self._paragraphs[self._question_index]
       return text['text'].split(":")[0]
-
-  def _next_question(self):
-    pass
 
 
 
