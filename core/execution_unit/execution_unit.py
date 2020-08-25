@@ -6,7 +6,7 @@ class ExecutionUnit:
     self._status = UnitStatus.OK
 
   def execute(self, instructions):
-    pass
+    raise Exception("Not implemented")
 
   def setStatus(self, status: UnitStatus):
     self._status = status
