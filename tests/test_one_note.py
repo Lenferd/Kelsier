@@ -30,5 +30,3 @@ class TestOneNote(TestCase):
     updated_paragraph = paragraphs[0]
     updated_paragraph['text'] = "New text"
     page.updateContent(updated_paragraph)
-
-# {"target":"body","action":"append","content":"Kek"}
