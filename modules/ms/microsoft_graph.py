@@ -32,17 +32,14 @@ class MicrosoftGraph:
       'Content-Type': 'application/json'
     }
 
-  ## Also hide callback to save new token
   def _load_cache(self, token_name: str):
     cache = msal.SerializableTokenCache()
     if os.path.exists(token_name):
       cache.deserialize(open(token_name, "r").read())
-
-    atexit.register(lambda:
-                    open(token_name, "w").write(cache.serialize())
-                    if cache.has_state_changed else None
-                    )
     self._cache = cache
+
+  def _save_cache(self, token_name: str):
+    open(token_name, "w").write(self._cache.serialize())
 
   def _auth(self):
     ms_api = msal.PublicClientApplication(
@@ -74,10 +71,12 @@ class MicrosoftGraph:
 
     if "access_token" in result:
       self._access_token = result['access_token']
+      self._save_cache(token_name=config["token_name"])
     else:
       logging.error(result.get("error"))
       logging.error(result.get("error_description"))
       logging.error(result.get("correlation_id"))
+
 
   def _is_json(self, headers):
     return 'application/json' in headers['Content-Type']
