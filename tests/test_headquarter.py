@@ -12,7 +12,7 @@ class TestHeadquarters(TestCase):
     self.assertEqual(exec_unit.getStatus(), UnitStatus.OK)
 
   def test_can_initiate_interactive_process(self):
-    initiate = "fill form"
+    initiate = "fill form:"
     exec_unit = Headquarter.process(initiate)
     self.assertEqual(exec_unit.getStatus(), UnitStatus.READY_TO_WORK)
 

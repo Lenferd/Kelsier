@@ -2,7 +2,7 @@ from core.command_home.extractor import Extractor
 from core.command_home.available_modules import AvailableModules
 from core.execution_unit.execution_unit import ExecutionUnit
 from core.execution_unit.todo import TODOExecutionUnit
-from core.execution_unit.unit_status import UnitStatus
+from core.execution_unit.onenote import OneNoteExecutionUnit
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -20,5 +20,6 @@ class Headquarter:
     if module == AvailableModules.TODO:
       return TODOExecutionUnit(command)
     if module == AvailableModules.ONE_NOTE:
-      return
+      return OneNoteExecutionUnit(command)
+    raise Exception("Suitable execution unit not found!")
 
