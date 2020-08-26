@@ -25,11 +25,13 @@ class TestHeadquarters(TestCase):
 
   def test_can_get_sequence_of_questions(self):
     initiate = "fill form"
-    expected_question = "Question 2"
     exec_unit = Headquarter.process(initiate)
     question1 = exec_unit.getQuestion()
+
     exec_unit.execute("Answer")
+
     question2 = exec_unit.getQuestion()
+    expected_question = "Question 2"
     self.assertEqual(expected_question, question2)
 
   def test_can_can_read_oneNote(self):
@@ -38,5 +40,19 @@ class TestHeadquarters(TestCase):
     text = exec_unit.execute("get first")
 
     expected_text = "Question 1: { Question 1 reply }"
-    self.assertEqual(expected_text, text)
+    self.assertEqual(expected_text.strip(), text.strip())
+
+  def test_can_reply_for_question(self):
+    initiate = "fill form"
+    answer = "Answer"
+    exec_unit = Headquarter.process(initiate)
+    question1 = exec_unit.getQuestion()
+    exec_unit.execute(answer)
+
+    initiate = "read note"
+    exec_unit = Headquarter.process(initiate)
+    text = exec_unit.execute("get first")
+
+    expected_answer = "Question 1: " + answer
+    self.assertEqual(expected_answer, text)
 

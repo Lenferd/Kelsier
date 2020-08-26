@@ -1,3 +1,5 @@
+import re
+
 from core.execution_unit.execution_unit import ExecutionUnit
 from modules.ms.one_note.one_note import OneNote
 from core.execution_unit.unit_status import UnitStatus
@@ -26,6 +28,7 @@ class OneNoteExecutionUnit(ExecutionUnit):
       # TODO very tricky
       return self._paragraphs[self._question_index]['text']
     if len(instructions):
+      self._fill_answer(instructions, self._question_index)
       self._question_index += 1
 
   # TODO Return class, which can be user to provide answer
@@ -35,6 +38,15 @@ class OneNoteExecutionUnit(ExecutionUnit):
     else:
       text = self._paragraphs[self._question_index]
       return text['text'].split(":")[0]
+
+  def _fill_answer(self, text, index):
+    paragraphs = self._page.getParagraphs()
+    updated_paragraph = paragraphs[index]
+    if updated_paragraph['text'].find("{") == -1 : return
+    updated_paragraph['text'] = re.sub(r'(.*){(.*)}$', r'\g<1>', updated_paragraph['text'])
+    updated_paragraph['text'] += text
+    self._page.updateContent(updated_paragraph)
+
 
 
 
