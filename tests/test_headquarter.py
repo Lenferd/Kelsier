@@ -4,6 +4,14 @@ from core.execution_unit.unit_status import UnitStatus
 
 
 class TestHeadquarters(TestCase):
+  def setUp(self) -> None:
+    initiate = "fill page"
+    text_to_set_1 = "Question 1: { Question 1 reply } "
+    text_to_set_2 = "Question 2: { Question 2 reply } "
+    exec_unit_set = Headquarter.process(initiate)
+    exec_unit_set.execute(text_to_set_1)
+    exec_unit_set.execute(text_to_set_2)
+
   def test_can_execute_create_todo_command(self):
     head = "create todo:"
     tail = "test todo from headquarters"
@@ -55,4 +63,19 @@ class TestHeadquarters(TestCase):
 
     expected_answer = "Question 1: " + answer
     self.assertEqual(expected_answer, text)
+
+  def test_can_set_line(self):
+    initiate = "fill page"
+    text_to_set = "KEK"
+    exec_unit_set = Headquarter.process(initiate)
+    exec_unit_set.execute(text_to_set)
+
+    initiate = "read note"
+    exec_unit_get = Headquarter.process(initiate)
+    result_text = exec_unit_get.execute("get first")
+    self.assertEqual(text_to_set, result_text)
+
+  # TODO For now test with my faith
+  def test_can_set_two_lines(self):
+    pass
 

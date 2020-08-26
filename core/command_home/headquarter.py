@@ -20,6 +20,7 @@ class Headquarter:
     if module == AvailableModules.TODO:
       return TODOExecutionUnit(command)
     if module == AvailableModules.ONE_NOTE:
-      return OneNoteExecutionUnit(command)
+      # TODO yes, we will provide full command for now
+      return OneNoteExecutionUnit(message)
     raise Exception("Suitable execution unit not found!")
 
