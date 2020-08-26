@@ -1,9 +1,13 @@
 import re
 from enum import Enum
+import logging
 
 from core.execution_unit.execution_unit import ExecutionUnit
 from modules.ms.one_note.one_note import OneNote
 from core.execution_unit.unit_status import UnitStatus
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 class Mode(Enum):
   MODE_NOT_FOUND = -1
@@ -14,9 +18,12 @@ class Mode(Enum):
 
 
 def _get_exec_mode(initiation):
-  if initiation.find("fill form") != -1:
+  template_mode = {"fill form", "fill template"}
+  if set(initiation) & set(template_mode) != -1:
+    logger.info("template mode")
     return Mode.FILL_TEMPLATE
   if initiation.find("fill page") != -1:
+    logger.info("fill page mode")
     return Mode.FILL_PAGE
   return Mode.MODE_NOT_FOUND
 
@@ -40,6 +47,7 @@ class OneNoteExecutionUnit(ExecutionUnit):
 
   # TODO Use dicts?
   def execute(self, instructions):
+    logger.info(instructions)
     if instructions.find("get") != -1:
       # TODO very tricky
       return self._paragraphs[self._index]['text']
@@ -63,7 +71,10 @@ class OneNoteExecutionUnit(ExecutionUnit):
     paragraphs = self._page.getParagraphs()
     updated_paragraph = paragraphs[index]
     if updated_paragraph['text'].find("{") == -1 : return
-    updated_paragraph['text'] = re.sub(r'(.*){(.*)}', r'\g<1>', updated_paragraph['text'])
+    match = r"(.*?)[{[(<](.*)[]})>]"
+    print(updated_paragraph['text'])
+    updated_paragraph['text'] = re.sub(match, r'\g<1>', updated_paragraph['text'])
+    print(updated_paragraph['text'])
     updated_paragraph['text'] += text
     self._page.updateContent(updated_paragraph)
 

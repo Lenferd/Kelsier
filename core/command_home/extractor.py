@@ -2,7 +2,7 @@ from core.command_home.available_modules import AvailableModules
 import re
 
 todo_words = {"todo", "task"}
-one_note_words = {"onenote", "note", "form", "page"}
+one_note_words = {"onenote", "note", "form", "page", "template"}
 
 
 class Extractor:
