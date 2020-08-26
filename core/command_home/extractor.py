@@ -1,24 +1,48 @@
-from core.command_home.commands import Command
-from core.command_home.commands import Types
+from core.command_home.available_modules import AvailableModules
+import re
 
-# TODO Use active mode and callbacks
-# TODO Add tests
+todo_words = {"todo", "task"}
+one_note_words = {"onenote", "note", "form", "page", "template"}
+
 
 class Extractor:
   @staticmethod
-  def parseCommand(str_command: str, callback) -> Command:
-    where = Extractor._searchWhereToDo(str_command)
-    what = Extractor._searchWhatToDo(str_command)
-    command = Command(where, what)
-    return command
+  def getModule(str_command: str) -> AvailableModules:
+    symbols_to_die = r'[.:!?;]'
+    cleaned_str = re.sub(symbols_to_die, ' ', str_command)
+    words = cleaned_str.lower().split()
+    set_words = set(words) if len(words) > 1 else {words}
+    if set_words & set(todo_words):
+      return AvailableModules.TODO
+    elif set_words & set(one_note_words):
+      return AvailableModules.ONE_NOTE
+    return AvailableModules.NOT_FOUND
+
+  # TODO Should it be execution module logic?
+  @staticmethod
+  def separateCommandFromModule(str_command: str):
+    command = Extractor._try_split(str_command)
+    if command is not None:
+      return command
+    command = Extractor._try_replace(str_command)
+    if len(command):
+      return command
+    return ""
 
   @staticmethod
-  def _searchWhereToDo(string: str):
-    # TODO More complicated logic required here
-    if string.lower().find("todo") != -1:
-      return Types.TODO_CREATE_TODO
-
-  @staticmethod
-  def _searchWhatToDo(string: str) -> str:
+  def _try_split(str_command: str):
     # TODO Handle this part more precisely
-    return string.split(":")[1]
+    try_split = str_command.split(":")
+    if len(try_split) > 1:
+      return try_split[1]
+    else:
+      return None
+
+  @staticmethod
+  def _try_replace(str_command: str):
+    try_replace = str_command
+    for command in todo_words:
+      try_replace = try_replace.replace(command, "")
+    for command in one_note_words:
+      try_replace = try_replace.replace(command, "")
+    return try_replace

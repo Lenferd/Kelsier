@@ -2,6 +2,7 @@ from modules.ms.microsoft_graph import MicrosoftGraph
 from modules.ms.one_note.notebook import Notebook
 from modules.ms.one_note.page import Page
 
+
 class OneNote:
   def __init__(self):
     self._ms = MicrosoftGraph()

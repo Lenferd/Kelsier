@@ -1,20 +1,54 @@
 from unittest import TestCase
 from core.command_home.extractor import Extractor
-from core.command_home.commands import Types
+from core.command_home.available_modules import AvailableModules
 
 
 class TestExtractor(TestCase):
-  def test_extract_todo_creation_command(self):
-    expected_data = "Test todo"
-    str_command = "create todo:" + expected_data
-    # "Create todo: Test todo"
-    # "Create TODO Test todo"
+  def setUp(self) -> None:
+    self.extractor = Extractor()
 
-    extractor = Extractor()
-    command = extractor.parseCommand(str_command, None)
+  def test_todo_module_default(self):
+    expected_module = AvailableModules.TODO
+    str_command = "create todo:"
 
-    expected_command = Types.TODO_CREATE_TODO
-    self.assertEqual(command.getType(), expected_command)
-    self.assertEqual(command.getData(), expected_data)
+    module = self.extractor.getModule(str_command)
+    self.assertEqual(expected_module, module)
 
+  def test_todo_module_no_case_sensitive(self):
+    expected_module = AvailableModules.TODO
+    str_command = "Create TODO:"
+
+    module = self.extractor.getModule(str_command)
+    self.assertEqual(expected_module, module)
+
+  def test_todo_extract_command(self):
+    expected_module = AvailableModules.TODO
+    str_module = "Create TODO:"
+    str_command = "Task 1"
+
+    full_command = str_module + str_command
+    module = self.extractor.getModule(full_command)
+    command = self.extractor.separateCommandFromModule(full_command)
+    self.assertEqual(expected_module, module)
+    self.assertEqual(str_command, command)
+
+  def test_todo_can_get_module_without_two_dots(self):
+    expected_module = AvailableModules.TODO
+    str_command = "create todo"
+
+    module = self.extractor.getModule(str_command)
+    self.assertEqual(expected_module, module)
+
+  def test_onenote_read_page(self):
+    expected_module = AvailableModules.ONE_NOTE
+    str_command = "read note"
+
+    module = self.extractor.getModule(str_command)
+    self.assertEqual(expected_module, module)
+
+  #   TODO Implement
+  def test_todo_can_split_without_two_dots(self):
+    pass
+    expected_module = AvailableModules.TODO
+    str_command = "Create TODO Task Name"
 
