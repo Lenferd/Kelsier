@@ -27,7 +27,7 @@ class OneNoteExecutionUnit(ExecutionUnit):
     # TODO Should not be hardcoded
     self._notebookName = "TestNotebook"
     self._sectionName = "TestSection"
-    self._pageName = "TemplatePage"
+    self._pageName = self._get_page_name(initial_command)
 
     self._execution_mode = _get_exec_mode(initial_command)
     self._status = UnitStatus.HAVE_QUESTION
@@ -72,6 +72,12 @@ class OneNoteExecutionUnit(ExecutionUnit):
     updated_paragraph = paragraphs[index]
     updated_paragraph['text'] = text
     self._page.updateContent(updated_paragraph)
+
+  def _get_page_name(self, initial_command):
+    if len(initial_command) == 0 or len(initial_command.split(":")) == 0:
+      return "TemplatePage"
+    split = initial_command.split(":")
+    return split[1]
 
 
 
