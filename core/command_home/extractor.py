@@ -11,10 +11,10 @@ class Extractor:
     symbols_to_die = r'[.:!?;]'
     cleaned_str = re.sub(symbols_to_die, ' ', str_command)
     words = cleaned_str.lower().split()
-
-    if set(words) & set(todo_words):
+    set_words = set(words) if len(words) > 1 else {words}
+    if set_words & set(todo_words):
       return AvailableModules.TODO
-    elif set(words) & set(one_note_words):
+    elif set_words & set(one_note_words):
       return AvailableModules.ONE_NOTE
     return AvailableModules.NOT_FOUND
 

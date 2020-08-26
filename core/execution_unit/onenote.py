@@ -18,18 +18,22 @@ class Mode(Enum):
 
 
 def _get_exec_mode(initiation):
-  template_mode = {"fill form", "fill template"}
-  if set(initiation) & set(template_mode) != -1:
-    logger.info("template mode")
+  initiation = initiation.strip()
+  template_modes = {"fill form", "fill template"}
+  if {initiation} & set(template_modes):
+    logger.info("Mode: Template")
     return Mode.FILL_TEMPLATE
   if initiation.find("fill page") != -1:
-    logger.info("fill page mode")
+    logger.info("Mode: Fill page")
     return Mode.FILL_PAGE
+  logger.info("Mode not determined. Init line \"{}\"".format(initiation))
   return Mode.MODE_NOT_FOUND
 
 
 class OneNoteExecutionUnit(ExecutionUnit):
   def __init__(self, initial_command: str):
+    logger.info(
+      '\t= Initialization of executor with command "{}"'.format(initial_command))
     self._oneNote = OneNote()
     # TODO Should not be hardcoded
     self._notebookName = "TestNotebook"
@@ -47,17 +51,21 @@ class OneNoteExecutionUnit(ExecutionUnit):
 
   # TODO Use dicts?
   def execute(self, instructions):
-    logger.info(instructions)
+    logger.info("Execute: {}".format(instructions))
     if instructions.find("get") != -1:
+      logger.info("Get line command, index {}".format(self._index))
       # TODO very tricky
       return self._paragraphs[self._index]['text']
     if len(instructions):
+      action = "None"
       if self._execution_mode == Mode.FILL_TEMPLATE:
         self._fill_answer(instructions, self._index)
+        action = "Fill template"
       if self._execution_mode == Mode.FILL_PAGE:
         self._fill_line(instructions, self._index)
+        action = "Fill page"
+      logger.info("{}: {} at line {}".format(action, instructions, self._index))
       self._index += 1
-
 
   # TODO Return class, which can be user to provide answer
   def getQuestion(self):
@@ -85,9 +93,12 @@ class OneNoteExecutionUnit(ExecutionUnit):
     self._page.updateContent(updated_paragraph)
 
   def _get_page_name(self, initial_command):
-    if len(initial_command) == 0 or len(initial_command.split(":")) == 0:
-      return "TemplatePage"
+    default = "TemplatePage"
+    if len(initial_command) == 0 or len(initial_command.split(":")) == 1:
+      return default
     split = initial_command.split(":")
+    if len(split[1]) == 0:
+      return default
     return split[1]
 
 
